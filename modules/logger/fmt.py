@@ -6,12 +6,12 @@ import modules.logger.config as cfg
 class LoggerFmt:
 
     def __init__(self):
-        self.__app_name = f'[bold italic bright_white on {cfg.APP_NAME_BG_COLOR}]  Domobile  [/]'
-        self.__info     = f'[bold {cfg.INFO_COLOR}][INFO ][/]'
-        self.__warn     = f'[bold {cfg.WARN_COLOR}][WARN ][/]'
-        self.__error    = f'[bold {cfg.ERROR_COLOR}][ERROR][/]'
-        self.__fatal    = f'[bold {cfg.FATAL_COLOR}][FATAL][/]'
-        self.__debug    = f'[bold {cfg.DEBUG_COLOR}][DEBUG][/]'
+        self.__app_name = f'[bold white on {cfg.APP_NAME_BG_COLOR}]  Domobile  [/]'
+        self.__info     = f'[bold {cfg.INFO_COLOR}][ INFO  ][/]'
+        self.__warn     = f'[bold {cfg.WARN_COLOR}][ WARN  ][/]'
+        self.__error    = f'[bold {cfg.ERROR_COLOR}][ ERROR ][/]'
+        self.__fatal    = f'[bold {cfg.FATAL_COLOR}][ FATAL ][/]'
+        self.__debug    = f'[bold {cfg.DEBUG_COLOR}][ DEBUG ][/]'
 
         self.__info_msg     = lambda msg: f'[{cfg.INFO_MSG_COLOR}]{msg}[/]'
         self.__warn_msg     = lambda msg: f'[{cfg.WARN_MSG_COLOR}]{msg}[/]'
@@ -23,9 +23,9 @@ class LoggerFmt:
         return f'[grey30]{datetime.fromtimestamp(timestamp).strftime("%d/%m/%y %H:%M:%S")}[/]'
     
     def fmtContext(self, context: str, subcontext: str, bg: str, fg: str) -> str:
-        return f'[bold {fg} on {bg}]({context}-{subcontext})[/]'
+        return f'[bold {fg} on {bg}]( {context}/{subcontext} )[/]'
 
-    def logInfo(self, timestamp: int, context: str, subcontext: str, bg: str, fg: str, message: str) -> None:
+    async def logInfo(self, timestamp: int, context: str, subcontext: str, bg: str, fg: str, message: str) -> None:
         rich.print(
             self.__app_name, 
             self.fmtTime(timestamp), 
@@ -34,7 +34,7 @@ class LoggerFmt:
             self.__info_msg(message)
         )
 
-    def logWarn(self, timestamp: int, context: str, subcontext: str, bg: str, fg: str, message: str) -> None:
+    async def logWarn(self, timestamp: int, context: str, subcontext: str, bg: str, fg: str, message: str) -> None:
         rich.print(
             self.__app_name, 
             self.fmtTime(timestamp), 
@@ -43,7 +43,7 @@ class LoggerFmt:
             self.__warn_msg(message)
         )
 
-    def logError(self, timestamp: int, context: str, subcontext: str, bg: str, fg: str, message: str) -> None:
+    async def logError(self, timestamp: int, context: str, subcontext: str, bg: str, fg: str, message: str) -> None:
         rich.print(
             self.__app_name, 
             self.fmtTime(timestamp), 
@@ -52,7 +52,7 @@ class LoggerFmt:
             self.__error_msg(message)
         )
 
-    def logFatal(self, timestamp: int, context: str, subcontext: str, bg: str, fg: str, message: str) -> None:
+    async def logFatal(self, timestamp: int, context: str, subcontext: str, bg: str, fg: str, message: str) -> None:
         rich.print(
             self.__app_name, 
             self.fmtTime(timestamp), 
@@ -61,7 +61,7 @@ class LoggerFmt:
             self.__fatal_msg(message)
         )
 
-    def logDebug(self, timestamp: int, context: str, subcontext: str, bg: str, fg: str, message: str) -> None:
+    async def logDebug(self, timestamp: int, context: str, subcontext: str, bg: str, fg: str, message: str) -> None:
         rich.print(
             self.__app_name, 
             self.fmtTime(timestamp), 
