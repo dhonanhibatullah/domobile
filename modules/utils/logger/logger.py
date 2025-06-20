@@ -1,8 +1,8 @@
 import asyncio
 import time
 from typing import Optional, Literal
-from modules.logger.db import LoggerDB
-from modules.logger.fmt import LoggerFmt
+from modules.utils.logger.db import LoggerDB
+from modules.utils.logger.fmt import LoggerFmt
 
 class Logger:
     __db:       Optional[LoggerDB]  = None

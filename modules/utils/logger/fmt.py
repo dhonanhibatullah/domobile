@@ -1,7 +1,7 @@
 from typing import Literal
 from datetime import datetime
 import rich
-import modules.logger.config as cfg
+import modules.utils.logger.config as cfg
 
 class LoggerFmt:
 
