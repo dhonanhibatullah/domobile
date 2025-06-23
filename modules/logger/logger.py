@@ -92,6 +92,7 @@ class LoggerHandler:
     def stop(self) -> None:
         with self.__ok_lock:
             self.__ok = False
+        self.__msg_q.put((-1, 0, '', '', '', '', ''))
         self.__thread.join()
 
     def __isOk(self) -> bool:
@@ -100,20 +101,17 @@ class LoggerHandler:
 
     def __routine(self) -> None:
         while self.__isOk():
-            try:
-                log = self.__msg_q.get(timeout=1)
-                if log[0] == INFO_TYPE:       
-                    self.__logInfo(log[1], log[2], log[3], log[4], log[5], log[6])
-                elif log[0] == WARN_TYPE:     
-                    self.__logWarn(log[1], log[2], log[3], log[4], log[5], log[6])
-                elif log[0] == ERROR_TYPE:    
-                    self.__logError(log[1], log[2], log[3], log[4], log[5], log[6])
-                elif log[0] == FATAL_TYPE:    
-                    self.__logFatal(log[1], log[2], log[3], log[4], log[5], log[6])
-                elif log[0] == DEBUG_TYPE:    
-                    self.__logDebug(log[1], log[2], log[3], log[4], log[5], log[6])
-            except:
-                pass
+            log = self.__msg_q.get()
+            if log[0] == INFO_TYPE:       
+                self.__logInfo(log[1], log[2], log[3], log[4], log[5], log[6])
+            elif log[0] == WARN_TYPE:     
+                self.__logWarn(log[1], log[2], log[3], log[4], log[5], log[6])
+            elif log[0] == ERROR_TYPE:    
+                self.__logError(log[1], log[2], log[3], log[4], log[5], log[6])
+            elif log[0] == FATAL_TYPE:    
+                self.__logFatal(log[1], log[2], log[3], log[4], log[5], log[6])
+            elif log[0] == DEBUG_TYPE:    
+                self.__logDebug(log[1], log[2], log[3], log[4], log[5], log[6])
 
     def __logInfo(self, timestamp: int, context: str, subcontext: str, bg: str, fg: str, message: str) -> None:
         fmt.logInfo(
