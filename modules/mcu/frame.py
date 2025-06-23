@@ -16,10 +16,13 @@ class MCUFrame:
         self.data_len = len(data)
 
     def parse(self, frame: bytes) -> None:
+        if len(frame) < 9:
+            raise ValueError('frame is too short')
+
         if frame[0] != 0xDD:
             raise ValueError('header is not 0xDD')
-        elif frame[-1] != 0xDD:
-            raise ValueError('tail is not 0xDD')
+        elif frame[-1] != 0xEE:
+            raise ValueError('tail is not 0xEE')
         
         crc_rx = (frame[-2] << 8) | frame[-3]
         crc_ex = binascii.crc_hqx(frame[1:-3], 0xFFFF)
@@ -42,5 +45,5 @@ class MCUFrame:
 
         frame   = bytes([self.id, self.address & 0xFF, (self.address >> 8) & 0xFF, self.data_len & 0xFF, (self.data_len >> 8) & 0xFF]) + self.data
         crc     = binascii.crc_hqx(frame, 0xFFFF)
-        frame   = bytes([0xDD]) + frame + bytes([crc & 0xFF, (crc >> 8) & 0xFF]) + bytes([0xDD])
+        frame   = bytes([0xDD]) + frame + bytes([crc & 0xFF, (crc >> 8) & 0xFF]) + bytes([0xEE])
         return frame
